@@ -35,7 +35,11 @@ router.get('/:id', async (req: Request, res: Response) => {
 // Create a new machine
 router.post('/', async (req: Request, res: Response) => {
     try {
-        const machine = Machine.create(req.body as Partial<Machine>);
+        console.log(req.body);
+        const machine = Machine.create({
+            ip: req.body.ip,
+            name: req.body.name
+        });
         await machine.save();
         res.status(201).json(machine);
     } catch (error) {
@@ -92,6 +96,7 @@ router.post('/:id/load-recipe', async (req: Request, res: Response) => {
         machine.pending_float_gap = floatGap;
         machine.pending_rope_length = ropeLength;
         machine.recipe_loaded = false;
+        machine.state = MachineState.Off;
         const result = await machine.save();
         res.json(result);
     } catch (error) {

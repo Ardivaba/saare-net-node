@@ -16,8 +16,8 @@ export class Machine extends BaseEntity {
     @Column({ type: "text" })
     ip: string;
 
-    @Column({ type: "bigint" })
-    recipe_code: number;
+    @Column({ type: "bigint", nullable: true })
+    recipe_code: number | null;
 
     @Column({ type: "double", nullable: true })
     float_length: number | null;
@@ -31,7 +31,7 @@ export class Machine extends BaseEntity {
     @Column({ type: "bigint", unsigned: true, nullable: true })
     current_production_id: number | null;
 
-    @Column({ type: "double" })
+    @Column({ type: "double", nullable: true, default: 0 })
     produced_rope_length: number;
 
     @Column({ type: "bigint", nullable: true })
@@ -46,7 +46,7 @@ export class Machine extends BaseEntity {
     @Column({ type: "double", nullable: true })
     pending_rope_length: number | null;
 
-    @Column({ type: "boolean" })
+    @Column({ type: "boolean", default: true })
     recipe_loaded: boolean;
 
     @Column({ type: "text" })
@@ -59,13 +59,13 @@ export class Machine extends BaseEntity {
     })
     state: MachineState;
 
-    @Column({ type: "bigint" })
+    @Column({ type: "bigint", default: 0 })
     off_time: number;
 
-    @Column({ type: "bigint" })
+    @Column({ type: "bigint", default: 0 })
     idle_time: number;
 
-    @Column({ type: "bigint" })
+    @Column({ type: "bigint", default: 0 })
     producing_time: number;
 
     @CreateDateColumn()
@@ -76,6 +76,9 @@ export class Machine extends BaseEntity {
 
     @ManyToOne(() => Worker, worker => worker.machines)
     worker: Worker;
+
+    @Column({ type: "bigint", nullable: true })
+    worker_id: number | null;
 
     @OneToMany(() => Production, production => production.machine)
     productions: Production[];

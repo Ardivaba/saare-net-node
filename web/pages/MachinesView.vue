@@ -54,7 +54,7 @@
             </span>
           </td>
           <td>{{ machine.code || 'Puudub' }}</td>
-          <td>{{ machine.produced_rope_length.toFixed(2) }} m</td>
+          <td>{{ machine.produced_rope_length !== null ? machine.produced_rope_length.toFixed(2) : 'Puudub' }} m</td>
           <td>
             <div class="flex space-x-2">
               <RouterLink :to="`/machines/${machine.id}`" class="btn btn-sm btn-info">Vaata</RouterLink>
