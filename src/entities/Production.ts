@@ -19,12 +19,6 @@ export class Production extends BaseEntity {
     @Column({ type: "datetime", precision: 3, nullable: true })
     end_date: Date | null;
 
-    @Column({ type: "double", nullable: true })
-    total_quantity: number | null;
-
-    @Column({ type: "double" })
-    start_quantity: number;
-
     @Column({ type: "double" })
     produced_quantity: number;
 

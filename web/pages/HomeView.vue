@@ -217,10 +217,10 @@ async function fetchProductionData() {
   
   todayProduction.value = productionsStore.productions
     .filter(p => p.end_date.startsWith(today))
-    .reduce((sum, p) => sum + p.total_quantity, 0);
+    .reduce((sum, p) => sum + p.produced_quantity, 0);
   
   weekProduction.value = productionsStore.productions
-    .reduce((sum, p) => sum + p.total_quantity, 0);
+    .reduce((sum, p) => sum + p.produced_quantity, 0);
 }
 
 async function fetchActiveWorker() {

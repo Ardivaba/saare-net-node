@@ -18,7 +18,7 @@ import { seedWorkers } from './seed/seeds/seedWorkers';
 import { seedSettings } from './seed/seeds/seedSettings';
 
 export const NumOrders = 30;
-export const NumMachines = 10;
+export const NumMachines = 1;
 export const NumProductions = 50;
 export const NumEvents = 100;
 
