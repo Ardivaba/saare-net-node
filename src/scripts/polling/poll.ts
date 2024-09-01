@@ -3,27 +3,39 @@ import { createConnection } from '../../utils/createConnection';
 import { Machine, MachineState } from '../../entities/Machine';
 import ModbusRTU from 'modbus-serial';
 import { Production } from '../../entities/Production';
+import { Recipe } from '../../entities/Recipe';
 
 async function init(): Promise<Machine[]> {
     await createConnection();
     return await Machine.find();
 }
 
-async function createModbusConnection(): Promise<ModbusRTU> {
+async function createModbusConnection(ip: string, port: number): Promise<ModbusRTU | null> {
     const client = new ModbusRTU();
-    await client.connectTCP('192.168.1.147', { port: 502 });
-    if (client.isOpen) {
-        console.log('Connection opened');
-    } else {
-        console.log('Failed to connect');
-        throw new Error('Failed to connect to Modbus');
+    try {
+        await client.connectTCP(ip, { port });
+        if (client.isOpen) {
+            console.log(`Connection opened to ${ip}:${port}`);
+            return client;
+        } else {
+            console.log(`Failed to connect to ${ip}:${port}`);
+            return null;
+        }
+    } catch (error) {
+        console.error(`Error connecting to ${ip}:${port}:`, error);
+        return null;
     }
-    return client;
 }
 
-async function saveMachineState(machine: Machine, client: ModbusRTU) {
+async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
+    if (!client) {
+        machine.state = MachineState.Off;
+        await machine.save();
+        console.log(`Machine ${machine.id} marked as Off due to connection failure`);
+        return;
+    }
+
     try {
-        const previousState = Object.assign({}, machine);
         const stateCoil = await client.readCoils(modbusConfig.readAddresses.stateCoilAddress, 1);
         const recipeId = await client.readHoldingRegisters(modbusConfig.readAddresses.recipeIdRegister, 1);
         const ropeLength = await client.readHoldingRegisters(modbusConfig.readAddresses.ropeLengthRegister, 1);
@@ -39,6 +51,18 @@ async function saveMachineState(machine: Machine, client: ModbusRTU) {
         machine.float_gap = floatGap.data[0];
         machine.produced_rope_length = producedLength.data[0] + producedLengthFP.data[0] / 1000;
 
+        var existingRecipe = await Recipe.findOneBy({ code: machine.recipe_code });
+        if (existingRecipe == null) {
+            const newRecipe = await Recipe.create({
+                code: machine.recipe_code,
+                description: 'Puudub',
+                float_gap: machine.float_gap,
+                float_length: machine.float_length,
+                rope_length: machine.rope_length
+            }).save();
+            console.log('Created new recipe', newRecipe);
+        }
+
         if (machine.produced_rope_length > 0) {
             let currentProduction: Production = null;
             if (machine.current_production_id !== null) {
@@ -52,10 +76,17 @@ async function saveMachineState(machine: Machine, client: ModbusRTU) {
                         machine.produced_rope_length < currentProduction.produced_quantity));
 
             if (shouldCreateNewProduction) {
+                if (currentProduction !== null) {
+                    currentProduction.end_date = new Date();
+                    await currentProduction.save();
+                }
+
                 const newProduction = await Production.create({
                     machine_id: machine.id,
                     produced_quantity: machine.produced_rope_length,
-                    recipe_code: machine.recipe_code
+                    recipe_code: machine.recipe_code,
+                    start_date: new Date(),
+                    end_date: null,
                 }).save();
                 console.log(`Creating new production with quantity: ${machine.produced_rope_length}`);
                 machine.current_production_id = newProduction.id;
@@ -74,31 +105,37 @@ async function saveMachineState(machine: Machine, client: ModbusRTU) {
         console.log(`Machine state updated for machine ${machine.id}: ${JSON.stringify(machine)}`);
     } catch (error) {
         console.error(`Error saving machine state for machine ${machine.id}:`, error);
+        machine.state = MachineState.Off;
+        await machine.save();
+        console.log(`Machine ${machine.id} marked as Off due to error`);
     }
 }
 
-async function pollMachines(machines: Machine[], client: ModbusRTU): Promise<void> {
+async function pollMachines(machines: Machine[]): Promise<void> {
     for (const machine of machines) {
+        const client = await createModbusConnection(machine.ip, 502);
         await saveMachineState(machine, client);
+        if (client && client.isOpen) {
+            await client.close(() => { });
+        }
     }
 }
 
 async function main(): Promise<void> {
     try {
         const machines = await init();
-        const client = await createModbusConnection();
 
         while (true) {
-            await pollMachines(machines, client);
+            await pollMachines(machines);
             await new Promise(resolve => setTimeout(resolve, modbusConfig.pollInterval));
-            console.log('Polling');
+            console.log('Polling completed');
         }
     } catch (error) {
-        console.error(error);
+        console.error('Main loop error:', error);
     }
 }
 
 main().catch(error => {
-    console.error(error);
+    console.error('Fatal error:', error);
     process.exit(1);
 });

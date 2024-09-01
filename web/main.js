@@ -29,6 +29,7 @@ if (import.meta.env.VITE_SENTRY_DSN) {
 axios.interceptors.response.use(
     response => response,
     error => {
+        /*
         if (error.response && error.response.status === 401) {
             router.push('/login')
                 .then(() => {
@@ -37,6 +38,7 @@ axios.interceptors.response.use(
                     Sentry.captureException(err);
                 });
         }
+        */
         return Promise.reject(error);
     }
 );

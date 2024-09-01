@@ -84,7 +84,7 @@
           <td>{{ production.id }}</td>
           <td>{{ production.recipe_code }}</td>
           <td>{{ formatDate(production.start_date) }}</td>
-          <td>{{ formatDate(production.end_date) }}</td>
+          <td>{{ production.end_date !== null ? formatDate(production.end_date) : 'Tootmisel' }}</td>
           <td>{{ production.produced_quantity ? production.produced_quantity.toFixed(2) : '0' }}</td>
           <td>{{ calculateProductionTime(production) }}</td>
           <td>{{ production.machine ? production.machine.name : 'M/S' }}</td>
@@ -174,7 +174,7 @@ const formatDate = (dateString) => {
 
 const calculateProductionTime = (production) => {
   const startDate = new Date(production.start_date);
-  const endDate = new Date(production.end_date);
+  const endDate = production.end_date !== null ? new Date(production.end_date) : new Date();
   const diffInMilliseconds = endDate - startDate;
   const hours = Math.floor(diffInMilliseconds / (1000 * 60 * 60));
   const minutes = Math.floor((diffInMilliseconds % (1000 * 60 * 60)) / (1000 * 60));

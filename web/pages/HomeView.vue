@@ -216,7 +216,7 @@ async function fetchProductionData() {
   await productionsStore.getProductions({ startDate: weekAgo, endDate: today });
   
   todayProduction.value = productionsStore.productions
-    .filter(p => p.end_date.startsWith(today))
+    .filter(p => p.start_date.startsWith(today))
     .reduce((sum, p) => sum + p.produced_quantity, 0);
   
   weekProduction.value = productionsStore.productions

@@ -49,7 +49,7 @@ router.post('/workers/login', async (req: Request, res: Response) => {
     const { code } = req.body;
     const worker = await Worker.findOne({ where: { code } });
     if (!worker) {
-        return res.status(200).json({ status: "fail", message: "invalid worker code" });
+        return res.status(401).json({ status: "fail", message: "invalid worker code" });
     }
 
     worker.is_logged_in = true;

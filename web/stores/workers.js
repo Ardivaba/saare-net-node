@@ -96,7 +96,7 @@ export const useWorkersStore = defineStore('workers', {
         },
         async logoutWorker() {
             try {
-                await axios.post(`${window.baseURL}/api/workers/logout`);
+                await axios.post(`${window.baseURL}/api/auth/workers/logout`);
                 this.setCurrentWorker(null);
             } catch (error) {
                 Sentry.captureException({msg: 'Error logging out worker', error});

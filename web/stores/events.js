@@ -38,7 +38,7 @@ export const useEventsStore = defineStore('events', {
         },
         setFilters(filters) {
             this.filters = filters;
-            this.currentPage = 1; // Reset to first page when applying new filters
+            this.currentPage = 1;
         },
         setSorting(column, direction) {
             this.sortColumn = column;
