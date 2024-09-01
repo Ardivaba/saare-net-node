@@ -8,11 +8,11 @@ router.get('/', async (req: Request, res: Response) => {
         let settings = await Settings.findOne({ where: { id: 1 } });
         if (!settings) {
             settings = Settings.create({
-                maxParkingTime: 0,
-                parkingLotActive: true,
-                totalSpaces: 0,
-                takenSpaces: 0,
-                signalDelayTime: 0
+                max_parking_time: 0,
+                parking_lot_active: true,
+                total_spaces: 0,
+                taken_spaces: 0,
+                signal_delay_time: 0
             });
             await settings.save();
         }
@@ -31,7 +31,7 @@ router.put('/', async (req: Request, res: Response) => {
         } else {
             Settings.merge(settings, req.body);
         }
-        if (settings.maxParkingTime < 0) {
+        if (settings.max_parking_time < 0) {
             return res.status(400).json({ error: 'MaxParkingTime must be 0 or greater' });
         }
         await settings.save();

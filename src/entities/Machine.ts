@@ -17,37 +17,37 @@ export class Machine extends BaseEntity {
     ip: string;
 
     @Column({ type: "bigint" })
-    recipeCode: number;
+    recipe_code: number;
 
     @Column({ type: "double", nullable: true })
-    floatLength: number | null;
+    float_length: number | null;
 
     @Column({ type: "double", nullable: true })
-    floatGap: number | null;
+    float_gap: number | null;
 
     @Column({ type: "double", nullable: true })
-    ropeLength: number | null;
+    rope_length: number | null;
 
     @Column({ type: "bigint", unsigned: true, nullable: true })
-    currentProductionId: number | null;
+    current_production_id: number | null;
 
     @Column({ type: "double" })
-    producedRopeLength: number;
+    produced_rope_length: number;
 
     @Column({ type: "bigint", nullable: true })
-    pendingCode: number | null;
+    pending_code: number | null;
 
     @Column({ type: "double", nullable: true })
-    pendingFloatLength: number | null;
+    pending_float_length: number | null;
 
     @Column({ type: "double", nullable: true })
-    pendingFloatGap: number | null;
+    pending_float_gap: number | null;
 
     @Column({ type: "double", nullable: true })
-    pendingRopeLength: number | null;
+    pending_rope_length: number | null;
 
     @Column({ type: "boolean" })
-    recipeLoaded: boolean;
+    recipe_loaded: boolean;
 
     @Column({ type: "text" })
     name: string;
@@ -60,19 +60,19 @@ export class Machine extends BaseEntity {
     state: MachineState;
 
     @Column({ type: "bigint" })
-    offTime: number;
+    off_time: number;
 
     @Column({ type: "bigint" })
-    idleTime: number;
+    idle_time: number;
 
     @Column({ type: "bigint" })
-    producingTime: number;
+    producing_time: number;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 
     @ManyToOne(() => Worker, worker => worker.machines)
     worker: Worker;

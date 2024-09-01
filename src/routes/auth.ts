@@ -1,5 +1,4 @@
 import { Router, Request, Response } from 'express';
-import { DataSource } from 'typeorm';
 import jwt from 'jsonwebtoken';
 import { Worker } from '../entities/Worker';
 import { config } from '../utils/config';
@@ -8,12 +7,6 @@ interface Auth {
     username: string;
     password: string;
 }
-
-let dataSource: DataSource;
-
-export const initAuth = (ds: DataSource) => {
-    dataSource = ds;
-};
 
 const router = Router();
 
@@ -54,38 +47,32 @@ router.post('/logout', (req: Request, res: Response) => {
 
 router.post('/workers/login', async (req: Request, res: Response) => {
     const { code } = req.body;
-    const workerRepository = dataSource.getRepository(Worker);
-
-    const worker = await workerRepository.findOne({ where: { code } });
+    const worker = await Worker.findOne({ where: { code } });
     if (!worker) {
-        return res.status(401).json({ status: "fail", message: "invalid worker code" });
+        return res.status(200).json({ status: "fail", message: "invalid worker code" });
     }
 
-    worker.isLoggedIn = true;
-    worker.lastLoginAt = new Date();
-    await workerRepository.save(worker);
+    worker.is_logged_in = true;
+    worker.last_login_at = new Date();
+    await worker.save();
 
     return res.status(200).json(worker);
 });
 
 router.post('/workers/logout', async (req: Request, res: Response) => {
-    const workerRepository = dataSource.getRepository(Worker);
-
-    const worker = await workerRepository.findOne({ where: { isLoggedIn: true } });
+    const worker = await Worker.findOne({ where: { is_logged_in: true } });
     if (!worker) {
         return res.status(404).json({ status: "fail", message: "No worker currently logged in" });
     }
 
-    worker.isLoggedIn = false;
-    await workerRepository.save(worker);
+    worker.is_logged_in = false;
+    await worker.save();
 
     return res.status(200).json({ status: "success" });
 });
 
 router.get('/workers/current', async (req: Request, res: Response) => {
-    const workerRepository = dataSource.getRepository(Worker);
-
-    const worker = await workerRepository.findOne({ where: { isLoggedIn: true } });
+    const worker = await Worker.findOne({ where: { is_logged_in: true } });
     if (!worker) {
         return res.status(401).json({ status: "fail", message: "No worker currently logged in" });
     }

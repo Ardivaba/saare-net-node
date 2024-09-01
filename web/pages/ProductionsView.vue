@@ -82,7 +82,7 @@
         <tbody>
         <tr v-for="production in productions" :key="production.id">
           <td>{{ production.id }}</td>
-          <td>{{ production.code }}</td>
+          <td>{{ production.recipe_code }}</td>
           <td>{{ formatDate(production.start_date) }}</td>
           <td>{{ formatDate(production.end_date) }}</td>
           <td>{{ production.produced_quantity ? production.produced_quantity.toFixed(2) : '0' }}</td>

@@ -7,10 +7,10 @@ export class WorkerLog extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @ManyToOne(() => Order, order => order.workerLogs)
+    @ManyToOne(() => Order, order => order.worker_logs)
     order: Order;
 
-    @ManyToOne(() => Worker, worker => worker.workerLogs)
+    @ManyToOne(() => Worker, worker => worker.worker_logs)
     worker: Worker;
 
     @Column("float")

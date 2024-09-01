@@ -6,17 +6,17 @@ export class Settings extends BaseEntity {
     id: number;
 
     @Column({ type: "bigint" })
-    maxParkingTime: number;
+    max_parking_time: number;
 
     @Column({ type: "boolean" })
-    parkingLotActive: boolean;
+    parking_lot_active: boolean;
 
     @Column({ type: "bigint" })
-    totalSpaces: number;
+    total_spaces: number;
 
     @Column({ type: "bigint" })
-    takenSpaces: number;
+    taken_spaces: number;
 
     @Column({ type: "bigint" })
-    signalDelayTime: number;
+    signal_delay_time: number;
 }

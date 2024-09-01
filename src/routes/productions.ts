@@ -103,11 +103,11 @@ router.get('/export', async (req: Request, res: Response) => {
         res.write('ID,Retsepti kood,Alguskuupäev,Lõppkuupäev,Kogus,Tootmisaeg,Masina nimi\n');
 
         productions.forEach(prod => {
-            const productionTime = prod.endDate ? prod.endDate.getTime() - prod.startDate.getTime() : 0;
+            const productionTime = prod.end_date ? prod.end_date.getTime() - prod.start_date.getTime() : 0;
             const hours = Math.floor(productionTime / 3600000);
             const minutes = Math.floor((productionTime % 3600000) / 60000);
 
-            res.write(`${prod.id},${prod.recipeCode},${formatDate(prod.startDate)},${prod.endDate ? formatDate(prod.endDate) : ''},${prod.producedQuantity.toFixed(2)},${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')},${prod.machine.name}\n`);
+            res.write(`${prod.id},${prod.recipe_code},${formatDate(prod.start_date)},${prod.end_date ? formatDate(prod.end_date) : ''},${prod.produced_quantity.toFixed(2)},${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')},${prod.machine.name}\n`);
         });
 
         res.end();

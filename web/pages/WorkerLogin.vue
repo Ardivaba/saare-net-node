@@ -28,6 +28,7 @@
 import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useWorkersStore } from '../stores/workers';
+import axios from 'axios'; // Make sure to import axios
 
 const router = useRouter();
 const workersStore = useWorkersStore();
@@ -38,10 +39,20 @@ const rfInput = ref(null);
 
 const login = async () => {
   try {
-    await workersStore.loginWorker(rfCode.value);
-    router.push('/worker-dashboard');
+    const response = await axios.post(window.baseURL + '/api/auth/workers/login', { code: rfCode.value });
+    await workersStore.setCurrentWorker(response.data);
+    console.log('Worker logged in:', response.data);
+    console.log('Current route:', router.currentRoute.value.path);
+    
+    // Force a redirect using window.location
+    window.location.href = '/worker-dashboard';
   } catch (error) {
-    error.value = 'Vale kiip. Palun proovige uuesti.';
+    console.error('Login error:', error);
+    if (error.response && error.response.status === 401) {
+      error.value = 'Vale kiip. Palun proovige uuesti.';
+    } else {
+      error.value = 'Sisselogimisel tekkis viga. Palun proovige hiljem uuesti.';
+    }
     rfCode.value = '';
   }
 };

@@ -87,11 +87,11 @@ router.post('/:id/load-recipe', async (req: Request, res: Response) => {
         if (!recipe) {
             return res.status(404).json({ error: 'Recipe not found' });
         }
-        machine.pendingCode = recipeCode;
-        machine.pendingFloatLength = floatLength;
-        machine.pendingFloatGap = floatGap;
-        machine.pendingRopeLength = ropeLength;
-        machine.recipeLoaded = false;
+        machine.pending_code = recipeCode;
+        machine.pending_float_length = floatLength;
+        machine.pending_float_gap = floatGap;
+        machine.pending_rope_length = ropeLength;
+        machine.recipe_loaded = false;
         const result = await machine.save();
         res.json(result);
     } catch (error) {

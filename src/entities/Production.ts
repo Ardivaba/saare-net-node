@@ -8,34 +8,34 @@ export class Production extends BaseEntity {
     id: number;
 
     @Column({ type: "bigint", nullable: true })
-    orderId: number | null;
+    order_id: number | null;
 
     @Column({ type: "bigint" })
-    recipeCode: number;
+    recipe_code: number;
 
     @Column({ type: "datetime", precision: 3, nullable: true })
-    startDate: Date | null;
+    start_date: Date | null;
 
     @Column({ type: "datetime", precision: 3, nullable: true })
-    endDate: Date | null;
+    end_date: Date | null;
 
     @Column({ type: "double", nullable: true })
-    totalQuantity: number | null;
+    total_quantity: number | null;
 
     @Column({ type: "double" })
-    startQuantity: number;
+    start_quantity: number;
 
     @Column({ type: "double" })
-    producedQuantity: number;
+    produced_quantity: number;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 
     @Column({ type: "bigint", unsigned: true, nullable: true })
-    machineId: number | null;
+    machine_id: number | null;
 
     @ManyToOne(() => Machine, machine => machine.productions)
     machine: Machine;

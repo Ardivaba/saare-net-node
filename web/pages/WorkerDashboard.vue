@@ -20,7 +20,7 @@
         <ul class="space-y-2">
           <li v-for="order in currentOrders" :key="order.id" class="p-4 bg-base-200 rounded-lg">
             <div class="text-xl font-semibold">Tellimus #{{ order.id }}</div>
-            <div>Retsept: {{ order.recipe.code }}</div>
+            <div>Retsept: {{ order.recipe ? order.recipe.code : 'Puudub' }}</div>
             <div>Kogus: {{ order.amount_ordered }}</div>
             <div>Toodetud: {{ order.amount_produced }}</div>
           </li>
@@ -97,10 +97,12 @@ const currentOrders = computed(() => ordersStore.orders.filter(order => !order.i
 const machines = computed(() => machinesStore.machines);
 
 onMounted(async () => {
-  // if (!currentWorker.value) {
-  //   router.push('/worker-login');
-  //   return;
-  // }
+  workersStore.initializeCurrentWorker();
+
+  if (!workersStore.currentWorker) {
+    router.push('/worker-login');
+    return;
+  }
 
   await Promise.all([
     ordersStore.getOrders(),

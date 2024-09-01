@@ -76,24 +76,37 @@ export const useWorkersStore = defineStore('workers', {
                 this.currentWorker = null;
             }
         },
+        setCurrentWorker(worker) {
+            this.currentWorker = worker;
+            if (worker) {
+                localStorage.setItem('currentWorker', JSON.stringify(worker));
+            } else {
+                localStorage.removeItem('currentWorker');
+            }
+        },
         async loginWorker(rfCode) {
             try {
-                const response = await axios.post(`${window.baseURL}/api/workers/login`, { code: rfCode });
-                this.currentWorker = response.data;
+                const response = await axios.post(`${window.baseURL}/api/auth/workers/login`, { code: rfCode });
+                this.setCurrentWorker(response.data);
                 return this.currentWorker;
             } catch (error) {
                 Sentry.captureException({msg: 'Error logging in worker', error});
                 throw error;
             }
         },
-
         async logoutWorker() {
             try {
                 await axios.post(`${window.baseURL}/api/workers/logout`);
-                this.currentWorker = null;
+                this.setCurrentWorker(null);
             } catch (error) {
                 Sentry.captureException({msg: 'Error logging out worker', error});
                 throw error;
+            }
+        },
+        initializeCurrentWorker() {
+            const storedWorker = localStorage.getItem('currentWorker');
+            if (storedWorker) {
+                this.currentWorker = JSON.parse(storedWorker);
             }
         },
         setPage(page) {

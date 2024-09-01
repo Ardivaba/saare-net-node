@@ -29,22 +29,22 @@ router.get('/', async (req: Request, res: Response) => {
 
         const queryBuilder = Order.createQueryBuilder('order')
             .leftJoinAndSelect('order.recipe', 'recipe')
-            .leftJoinAndSelect('order.currentWorker', 'currentWorker');
+            .leftJoinAndSelect('order.current_worker', 'current_worker');
 
         // Apply filters
         if (id) queryBuilder.andWhere('order.id = :id', { id });
         if (recipeCode) queryBuilder.andWhere('recipe.code LIKE :recipeCode', { recipeCode: `${recipeCode}%` });
         if (recipeDescription) queryBuilder.andWhere('recipe.description LIKE :recipeDescription', { recipeDescription: `%${recipeDescription}%` });
         if (info) queryBuilder.andWhere('order.info LIKE :info', { info: `%${info}%` });
-        if (amountOrderedMin) queryBuilder.andWhere('order.amountOrdered >= :amountOrderedMin', { amountOrderedMin });
-        if (amountOrderedMax) queryBuilder.andWhere('order.amountOrdered <= :amountOrderedMax', { amountOrderedMax });
-        if (amountProducedMin) queryBuilder.andWhere('order.amountProduced >= :amountProducedMin', { amountProducedMin });
-        if (amountProducedMax) queryBuilder.andWhere('order.amountProduced <= :amountProducedMax', { amountProducedMax });
-        if (isFinished) queryBuilder.andWhere('order.isFinished = :isFinished', { isFinished: isFinished === 'true' });
-        if (createdAtStart) queryBuilder.andWhere('order.createdAt >= :createdAtStart', { createdAtStart });
-        if (createdAtEnd) queryBuilder.andWhere('order.createdAt <= :createdAtEnd', { createdAtEnd });
-        if (updatedAtStart) queryBuilder.andWhere('order.updatedAt >= :updatedAtStart', { updatedAtStart });
-        if (updatedAtEnd) queryBuilder.andWhere('order.updatedAt <= :updatedAtEnd', { updatedAtEnd });
+        if (amountOrderedMin) queryBuilder.andWhere('order.amount_ordered >= :amountOrderedMin', { amountOrderedMin });
+        if (amountOrderedMax) queryBuilder.andWhere('order.amount_ordered <= :amountOrderedMax', { amountOrderedMax });
+        if (amountProducedMin) queryBuilder.andWhere('order.amount_produced >= :amountProducedMin', { amountProducedMin });
+        if (amountProducedMax) queryBuilder.andWhere('order.amount_produced <= :amountProducedMax', { amountProducedMax });
+        if (isFinished) queryBuilder.andWhere('order.is_finished = :isFinished', { isFinished: isFinished === 'true' });
+        if (createdAtStart) queryBuilder.andWhere('order.created_at >= :createdAtStart', { createdAtStart });
+        if (createdAtEnd) queryBuilder.andWhere('order.created_at <= :createdAtEnd', { createdAtEnd });
+        if (updatedAtStart) queryBuilder.andWhere('order.updated_at >= :updatedAtStart', { updatedAtStart });
+        if (updatedAtEnd) queryBuilder.andWhere('order.updated_at <= :updatedAtEnd', { updatedAtEnd });
 
         // Apply sorting
         const sortDirection = direction.toString().toUpperCase() === 'DESC' ? 'DESC' : 'ASC';
@@ -72,7 +72,7 @@ router.get('/:id', async (req: Request, res: Response) => {
     try {
         const order = await Order.findOne({
             where: { id: parseInt(req.params.id) },
-            relations: ['recipe', 'currentWorker']
+            relations: ['recipe', 'current_worker']
         });
         if (!order) {
             return res.status(404).json({ error: 'Order not found' });
@@ -102,8 +102,8 @@ router.post('/', async (req: Request, res: Response) => {
         const order = Order.create({
             ...orderData,
             recipe,
-            amountProduced: 0,
-            isFinished: false
+            amount_produced: 0,
+            is_finished: false
         });
 
         await order.save();

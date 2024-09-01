@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto">
-    <AppHeader v-if="!isLoginPage"/>
+    <AppHeader v-if="!isWorkerPage"/>
     <router-view/>
   </div>
 </template>
@@ -12,5 +12,10 @@ import {useRoute} from "vue-router";
 import {computed} from "vue";
 
 const route = useRoute();
-const isLoginPage = computed(() => route.path === '/login' || route.path === '/documentation');
+const isWorkerPage = computed(() => 
+  route.path === '/worker-login' || 
+  route.path === '/worker-dashboard' || 
+  route.path === '/login' || 
+  route.path === '/documentation'
+);
 </script>

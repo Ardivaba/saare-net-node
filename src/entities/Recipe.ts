@@ -13,22 +13,22 @@ export class Recipe extends BaseEntity {
     description: string;
 
     @Column("float")
-    floatGap: number;
+    float_gap: number;
 
     @Column("float")
-    floatLength: number;
+    float_length: number;
 
     @Column("float")
-    ropeLength: number;
+    rope_length: number;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 
     @DeleteDateColumn()
-    deletedAt: Date;
+    deleted_at: Date;
 
     @OneToMany(() => Order, order => order.recipe)
     orders: Order[];

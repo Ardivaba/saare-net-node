@@ -27,26 +27,26 @@ export class Worker extends BaseEntity {
     code: number;
 
     @Column({ type: "varchar" })
-    phoneNumber: string;
+    phone_number: string;
 
-    @Column({ type: "boolean" })
-    isLoggedIn: boolean;
+    @Column({ type: "boolean", default: true })
+    is_logged_in: boolean;
 
     @Column({ type: "datetime", nullable: true })
-    lastLoginAt: Date | null;
+    last_login_at: Date | null;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date;
+    updated_at: Date;
 
     @OneToMany(() => Machine, machine => machine.worker)
     machines: Machine[];
 
-    @OneToMany(() => Order, order => order.currentWorker)
-    currentOrders: Order[];
+    @OneToMany(() => Order, order => order.current_worker)
+    current_orders: Order[];
 
     @OneToMany(() => WorkerLog, workerLog => workerLog.worker)
-    workerLogs: WorkerLog[];
+    worker_logs: WorkerLog[];
 }

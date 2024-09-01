@@ -27,5 +27,5 @@ export class Event extends BaseEntity {
     data: Record<string, any>;
 
     @CreateDateColumn()
-    createdAt: Date;
+    created_at: Date;
 }
