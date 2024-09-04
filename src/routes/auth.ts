@@ -4,6 +4,7 @@ import { Worker, WorkerStatus } from '../entities/Worker';
 import { config } from '../utils/config';
 import { Not } from 'typeorm';
 import { Event, EventType } from '../entities/Event';
+import { Machine } from '../entities/Machine';
 
 interface Auth {
     username: string;
@@ -60,6 +61,13 @@ router.post('/workers/login', async (req: Request, res: Response) => {
         {
             status: WorkerStatus.NotInFactory,
             is_logged_in: false
+        }
+    );
+
+    await Machine.update(
+        {},
+        {
+            worker_id: worker.id
         }
     );
 
