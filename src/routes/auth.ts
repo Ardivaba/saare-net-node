@@ -1,7 +1,9 @@
 import { Router, Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
-import { Worker } from '../entities/Worker';
+import { Worker, WorkerStatus } from '../entities/Worker';
 import { config } from '../utils/config';
+import { Not } from 'typeorm';
+import { Event, EventType } from '../entities/Event';
 
 interface Auth {
     username: string;
@@ -48,10 +50,28 @@ router.post('/logout', (req: Request, res: Response) => {
 router.post('/workers/login', async (req: Request, res: Response) => {
     const { code } = req.body;
     const worker = await Worker.findOne({ where: { code } });
+
     if (!worker) {
         return res.status(401).json({ status: "fail", message: "invalid worker code" });
     }
 
+    await Worker.update(
+        { id: Not(worker.id) },
+        {
+            status: WorkerStatus.NotInFactory,
+            is_logged_in: false
+        }
+    );
+
+    await Event.create({
+        type: EventType.WorkerLoggedIn,
+        data: {
+            worker_id: worker.id,
+            worker_name: worker.name,
+        }
+    }).save();
+
+    worker.status = WorkerStatus.InFactory;
     worker.is_logged_in = true;
     worker.last_login_at = new Date();
     await worker.save();

@@ -4,6 +4,7 @@ import { Machine, MachineState } from '../../entities/Machine';
 import ModbusRTU from 'modbus-serial';
 import { Production } from '../../entities/Production';
 import { Recipe } from '../../entities/Recipe';
+import { Event, EventType } from '../../entities/Event';
 
 async function init(): Promise<Machine[]> {
     await createConnection();
@@ -31,6 +32,14 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
     if (!client) {
         machine.state = MachineState.Off;
         await machine.save();
+
+        await Event.create({
+            type: EventType.ProductionStarted,
+            data: {
+                machine_id: machine.id,
+                new_status: machine.state,
+            }
+        }).save();
         console.log(`Machine ${machine.id} marked as Off due to connection failure`);
         return;
     }
@@ -44,7 +53,19 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
         const producedLength = await client.readHoldingRegisters(modbusConfig.readAddresses.producedLengthRegister, 1);
         const producedLengthFP = await client.readHoldingRegisters(modbusConfig.readAddresses.producedLengthFloatingPointRegister, 1);
 
-        machine.state = stateCoil.data[0] ? MachineState.Producing : MachineState.Waiting;
+        var newState = stateCoil.data[0] ? MachineState.Producing : MachineState.Waiting;
+
+        if (machine.state != newState) {
+            await Event.create({
+                type: EventType.ProductionStarted,
+                data: {
+                    machine_id: machine.id,
+                    new_status: machine.state,
+                }
+            }).save();
+        }
+
+        machine.state = newState;
         machine.recipe_code = recipeId.data[0] + modbusConfig.recipeCodeOffset;
         machine.rope_length = ropeLength.data[0];
         machine.float_length = floatLength.data[0];
@@ -79,6 +100,14 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
                 if (currentProduction !== null) {
                     currentProduction.end_date = new Date();
                     await currentProduction.save();
+
+                    await Event.create({
+                        type: EventType.ProductionCompleted,
+                        data: {
+                            production_id: currentProduction.id,
+                            quantity: 1,
+                        }
+                    }).save();
                 }
 
                 const newProduction = await Production.create({
@@ -88,6 +117,15 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
                     start_date: new Date(),
                     end_date: null,
                 }).save();
+
+                await Event.create({
+                    type: EventType.ProductionStarted,
+                    data: {
+                        production_id: newProduction.id,
+                        quantity: 1,
+                    }
+                }).save();
+
                 console.log(`Creating new production with quantity: ${machine.produced_rope_length}`);
                 machine.current_production_id = newProduction.id;
             } else if (currentProduction && machine.produced_rope_length > currentProduction.produced_quantity) {
@@ -107,6 +145,14 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
         console.error(`Error saving machine state for machine ${machine.id}:`, error);
         machine.state = MachineState.Off;
         await machine.save();
+
+        await Event.create({
+            type: EventType.ProductionStarted,
+            data: {
+                machine_id: machine.id,
+                new_status: machine.state,
+            }
+        }).save();
         console.log(`Machine ${machine.id} marked as Off due to error`);
     }
 }
@@ -126,10 +172,10 @@ async function main(): Promise<void> {
         const machines = await init();
 
         // while (true) {
-            await pollMachines(machines);
-            await new Promise(resolve => setTimeout(resolve, modbusConfig.pollInterval));
-            console.log('Polling completed');
-	    process.exit();
+        await pollMachines(machines);
+        await new Promise(resolve => setTimeout(resolve, modbusConfig.pollInterval));
+        console.log('Polling completed');
+        process.exit();
         // }
     } catch (error) {
         console.error('Main loop error:', error);
@@ -140,8 +186,8 @@ main().catch(error => {
     console.error('Fatal error:', error);
 
     setTimeout(function () {
-	    console.log('Process killed by process timeout');
-	    process.exit();
+        console.log('Process killed by process timeout');
+        process.exit();
     }, 30000);
 
     process.exit(1);
