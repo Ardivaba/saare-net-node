@@ -93,6 +93,14 @@ router.post('/workers/logout', async (req: Request, res: Response) => {
         return res.status(404).json({ status: "fail", message: "No worker currently logged in" });
     }
 
+    await Event.create({
+        type: EventType.WorkerLoggedOut,
+        data: {
+            worker_id: worker.id,
+            worker_name: worker.name,
+        }
+    }).save();
+
     worker.is_logged_in = false;
     await worker.save();
 
