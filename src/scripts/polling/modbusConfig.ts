@@ -25,7 +25,7 @@ interface ModbusConfig {
 }
 
 export const modbusConfig: ModbusConfig = {
-    pollInterval: 3000,
+    pollInterval: 10000,
     readAddresses: {
         stateCoilAddress: 20,
         recipeIdRegister: 44,

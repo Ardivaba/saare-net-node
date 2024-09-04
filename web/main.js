@@ -44,7 +44,8 @@ axios.interceptors.response.use(
 );
 axios.defaults.withCredentials = true;
 
-window.baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+// window.baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
+window.baseURL = "http://192.168.1.32:3000";
 
 app.use(pinia).use(router).mount('#app');
 

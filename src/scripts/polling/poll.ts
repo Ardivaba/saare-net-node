@@ -125,11 +125,12 @@ async function main(): Promise<void> {
     try {
         const machines = await init();
 
-        while (true) {
+        // while (true) {
             await pollMachines(machines);
             await new Promise(resolve => setTimeout(resolve, modbusConfig.pollInterval));
             console.log('Polling completed');
-        }
+	    process.exit();
+        // }
     } catch (error) {
         console.error('Main loop error:', error);
     }
@@ -137,5 +138,11 @@ async function main(): Promise<void> {
 
 main().catch(error => {
     console.error('Fatal error:', error);
+
+    setTimeout(function () {
+	    console.log('Process killed by process timeout');
+	    process.exit();
+    }, 30000);
+
     process.exit(1);
 });
