@@ -5,7 +5,7 @@
       
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div>
-          <p class="text-xl"><strong>Retsepti ID:</strong> {{ machine.recipe?.id || 'Puudub' }}</p>
+          <p class="text-xl"><strong>Retsepti kood:</strong> {{ machine.recipe_code || 'Puudub' }}</p>
           <p class="text-xl"><strong>Ujuki pikkus:</strong> {{ machine.float_length || 'Puudub' }} mm</p>
           <p class="text-xl"><strong>Ujuki vahe:</strong> {{ machine.float_gap || 'Puudub' }} mm</p>
         </div>
