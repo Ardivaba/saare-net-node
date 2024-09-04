@@ -30,16 +30,19 @@ async function createModbusConnection(ip: string, port: number): Promise<ModbusR
 
 async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
     if (!client) {
+        if (machine.state != MachineState.Off) {
+            await Event.create({
+                type: EventType.MachineStatusChanged,
+                data: {
+                    machine_id: machine.id,
+                    new_status: MachineState.Off,
+                }
+            }).save();
+        }
+
         machine.state = MachineState.Off;
         await machine.save();
 
-        await Event.create({
-            type: EventType.ProductionStarted,
-            data: {
-                machine_id: machine.id,
-                new_status: machine.state,
-            }
-        }).save();
         console.log(`Machine ${machine.id} marked as Off due to connection failure`);
         return;
     }
@@ -57,7 +60,7 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
 
         if (machine.state != newState) {
             await Event.create({
-                type: EventType.ProductionStarted,
+                type: EventType.MachineStatusChanged,
                 data: {
                     machine_id: machine.id,
                     new_status: machine.state,
@@ -143,16 +146,19 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
         console.log(`Machine state updated for machine ${machine.id}: ${JSON.stringify(machine)}`);
     } catch (error) {
         console.error(`Error saving machine state for machine ${machine.id}:`, error);
+
+        if (machine.state != MachineState.Off) {
+            await Event.create({
+                type: EventType.ProductionStarted,
+                data: {
+                    machine_id: machine.id,
+                    new_status: MachineState.Off,
+                }
+            }).save();
+        }
+
         machine.state = MachineState.Off;
         await machine.save();
-
-        await Event.create({
-            type: EventType.ProductionStarted,
-            data: {
-                machine_id: machine.id,
-                new_status: machine.state,
-            }
-        }).save();
         console.log(`Machine ${machine.id} marked as Off due to error`);
     }
 }
