@@ -182,13 +182,13 @@ async function main(): Promise<void> {
     }
 }
 
+setTimeout(function () {
+    console.log('Process killed by process timeout');
+    process.exit();
+}, 30000);
+
 main().catch(error => {
     console.error('Fatal error:', error);
-
-    setTimeout(function () {
-        console.log('Process killed by process timeout');
-        process.exit();
-    }, 30000);
 
     process.exit(1);
 });
