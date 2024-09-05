@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useOrdersStore } from '../stores/orders';
 import { useMachinesStore } from '../stores/machines';
@@ -96,6 +96,8 @@ const currentWorker = computed(() => workersStore.currentWorker);
 const currentOrders = computed(() => ordersStore.orders.filter(order => !order.is_finished));
 const machines = computed(() => machinesStore.machines);
 
+let pollInterval;
+
 onMounted(async () => {
   workersStore.initializeCurrentWorker();
 
@@ -104,12 +106,9 @@ onMounted(async () => {
     return;
   }
 
-  await Promise.all([
-    ordersStore.getOrders(),
-    machinesStore.getMachines(),
-  ]);
+  await fetchData();
+  pollInterval = setInterval(fetchData, 10 * 1000);
 
-  // Load documentation content
   try {
     const response = await fetch('/documentation/pages/WorkerDashboard.generated.md');
     documentationContent.value = await response.text();
@@ -117,6 +116,17 @@ onMounted(async () => {
     console.error('Error loading documentation:', error);
   }
 });
+
+onUnmounted(() => {
+  clearInterval(pollInterval);
+});
+
+async function fetchData() {
+  await Promise.all([
+    ordersStore.getOrders(),
+    machinesStore.getMachines(),
+  ]);
+}
 
 const openMachineModal = (machine) => {
   selectedMachine.value = machine;
