@@ -41,7 +41,7 @@
             }"
             @click="openMachineModal(machine)"
           >
-            Masin #{{ machine.name }}
+            {{ machine.name }}
           </div>
         </div>
       </div>
