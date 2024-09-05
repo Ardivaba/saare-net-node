@@ -29,6 +29,9 @@ async function createModbusConnection(ip: string, port: number): Promise<ModbusR
 }
 
 async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
+    const now = new Date();
+    const duration = now.getTime() - machine.updated_at.getTime();
+
     if (!client) {
         if (machine.state != MachineState.Off) {
             await Event.create({
@@ -40,6 +43,7 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
             }).save();
         }
 
+        machine.off_time += duration;
         machine.state = MachineState.Off;
         await machine.save();
 
@@ -66,6 +70,10 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
                     new_status: machine.state,
                 }
             }).save();
+
+            machine.off_time = 0;
+            machine.idle_time = 0;
+            machine.producing_time = 0;
         }
 
         machine.state = newState;
@@ -74,6 +82,16 @@ async function saveMachineState(machine: Machine, client: ModbusRTU | null) {
         machine.float_length = floatLength.data[0];
         machine.float_gap = floatGap.data[0];
         machine.produced_rope_length = producedLength.data[0] + producedLengthFP.data[0] / 1000;
+
+        switch (newState) {
+            case MachineState.Producing:
+                machine.producing_time += duration;
+                break;
+
+            case MachineState.Waiting:
+                machine.idle_time += duration;
+                break;
+        }
 
         var existingRecipe = await Recipe.findOneBy({ code: machine.recipe_code });
         if (existingRecipe == null) {
