@@ -101,6 +101,7 @@ router.post('/workers/logout', async (req: Request, res: Response) => {
         }
     }).save();
 
+    worker.status = WorkerStatus.NotInFactory;
     worker.is_logged_in = false;
     await worker.save();
 
