@@ -10,6 +10,7 @@ import { Settings } from '../entities/Settings';
 import { Worker } from '../entities/Worker';
 import { WorkerLog } from '../entities/WorkerLog';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ProductionWorkLog } from "../entities/ProductionWorkLog";
 
 export async function createConnection() {
     const dataSource = new DataSource({
@@ -27,7 +28,8 @@ export async function createConnection() {
             Recipe,
             Settings,
             Worker,
-            WorkerLog
+            WorkerLog,
+            ProductionWorkLog,
         ],
         synchronize: true,
         namingStrategy: new SnakeNamingStrategy()

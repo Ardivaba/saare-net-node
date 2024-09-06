@@ -8,6 +8,7 @@ import { Recipe } from "./entities/Recipe";
 import { Settings } from "./entities/Settings";
 import { WorkerLog } from "./entities/WorkerLog";
 import { config } from "./utils/config";
+import { ProductionWorkLog } from "./entities/ProductionWorkLog";
 
 // Database connection and server start
 export const startServer = async () => {
@@ -28,7 +29,8 @@ export const startServer = async () => {
                     Recipe,
                     Settings,
                     Worker,
-                    WorkerLog
+                    WorkerLog,
+                    ProductionWorkLog,
                 ],
                 synchronize: true,
                 namingStrategy: new SnakeNamingStrategy()

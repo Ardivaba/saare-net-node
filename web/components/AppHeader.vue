@@ -26,7 +26,9 @@
         <li><RouterLink to="/recipes" active-class="!bg-secondary !text-secondary-content font-bold">Retseptid</RouterLink></li>
         <li><RouterLink to="/orders" active-class="!bg-secondary !text-secondary-content font-bold">Tellimused</RouterLink></li>
         <li><RouterLink to="/productions" active-class="!bg-secondary !text-secondary-content font-bold">Toodang</RouterLink></li>
+        <li><RouterLink to="/production-work-logs" active-class="!bg-secondary !text-secondary-content font-bold">Tööajad</RouterLink></li>
         <li><RouterLink to="/machines" active-class="bg-secondary text-secondary-content">Masinad</RouterLink></li>
+        <li><RouterLink to="/reports" active-class="!bg-secondary !text-secondary-content font-bold">Raportid</RouterLink></li>
         <li><RouterLink to="/settings" active-class="!bg-secondary !text-secondary-content font-bold">Seaded</RouterLink></li>
       </ul>
     </div>

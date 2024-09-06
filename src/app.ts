@@ -17,6 +17,8 @@ import productionRoutes from './routes/productions';
 import settingsRoutes from './routes/settings';
 import eventRoutes from './routes/events';
 import authRoutes from './routes/auth';
+import reportsRoutes from './routes/reports';
+import productionWorkLogsRoutes from './routes/productionWorkLogs';
 
 // Import middlewares
 import { authMiddleware } from './middleware/authMiddleware';
@@ -47,8 +49,10 @@ app.use('/api/orders', authMiddleware, orderRoutes);
 app.use('/api/recipes', authMiddleware, recipeRoutes);
 app.use('/api/workers', authMiddleware, workerRoutes);
 app.use('/api/productions', authMiddleware, productionRoutes);
+app.use('/api/production-work-logs', authMiddleware, productionWorkLogsRoutes);
 app.use('/api/settings', authMiddleware, settingsRoutes);
 app.use('/api/events', authMiddleware, eventRoutes);
+app.use('/api/reports', authMiddleware, reportsRoutes);
 
 // Error handling
 app.use(errorHandler);

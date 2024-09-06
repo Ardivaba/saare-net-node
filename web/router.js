@@ -17,6 +17,8 @@ import MachinesView from './pages/MachinesView.vue'
 import MachineView from './pages/MachineView.vue'
 import MachineEdit from './pages/MachineEdit.vue'
 import ProductionsView from './pages/ProductionsView.vue';
+import ProductionWorkLogsView from './pages/ProductionWorkLogsView.vue';
+import ReportsView from './pages/ReportsView.vue';
 import WorkerLogin from './pages/WorkerLogin.vue';
 import WorkerDashboard from './pages/WorkerDashboard.vue';
 import DocumentationView from './pages/DocumentationView.vue';
@@ -43,7 +45,9 @@ const routes = [
     {path: '/machines/create', name: 'machine-create', component: MachineEdit},
     {path: '/machines/:id', name: 'machine-view', component: MachineView},
     {path: '/machines/edit/:id', name: 'machine-edit', component: MachineEdit},
+    {path: '/reports', name: 'reports', component: ReportsView},
     {path: '/productions', name: 'productions', component: ProductionsView},
+    {path: '/production-work-logs', name: 'production-work-logs', component: ProductionWorkLogsView},
     {path: '/worker-login', name: 'worker-login', component: WorkerLogin},
     {path: '/worker-dashboard', name: 'worker-dashboard', component: WorkerDashboard},
     {

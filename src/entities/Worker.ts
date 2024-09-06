@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn, Up
 import { Machine } from "./Machine";
 import { Order } from "./Order";
 import { WorkerLog } from "./WorkerLog";
+import { ProductionWorkLog } from "./ProductionWorkLog";
 
 export enum WorkerStatus {
     InFactory = "InFactory",
@@ -49,4 +50,7 @@ export class Worker extends BaseEntity {
 
     @OneToMany(() => WorkerLog, workerLog => workerLog.worker)
     worker_logs: WorkerLog[];
+
+    @OneToMany(() => ProductionWorkLog, workLog => workLog.worker)
+    productionWorkLogs: ProductionWorkLog[];
 }

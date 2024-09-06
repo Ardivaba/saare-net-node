@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, BaseEntity } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, CreateDateColumn, UpdateDateColumn, BaseEntity, OneToMany } from "typeorm";
 import { Machine } from "./Machine";
 import { Order } from "./Order";
+import { ProductionWorkLog } from "./ProductionWorkLog";
 
 @Entity()
 export class Production extends BaseEntity {
@@ -36,4 +37,7 @@ export class Production extends BaseEntity {
 
     @ManyToOne(() => Order)
     order: Order;
+
+    @OneToMany(() => ProductionWorkLog, workLog => workLog.production)
+    workLogs: ProductionWorkLog[];
 }
