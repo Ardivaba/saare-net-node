@@ -71,7 +71,7 @@
         <thead>
         <tr>
           <th @click="sort('id')">ID {{ sortIcon('id') }}</th>
-          <th>Retsepti kood</th>
+          <th>Joosepi kood</th>
           <th @click="sort('start_date')">Alguskuupäev {{ sortIcon('start_date') }}</th>
           <th @click="sort('end_date')">Lõppkuupäev {{ sortIcon('end_date') }}</th>
           <th @click="sort('produced_quantity')">Kogus {{ sortIcon('produced_quantity') }}</th>
