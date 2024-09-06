@@ -1,7 +1,7 @@
 <template>
   <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
     <div class="bg-base-100 p-6 rounded-lg max-w-2xl w-full">
-      <h2 class="text-3xl font-bold mb-4">Masin #{{ machine.name }}</h2>
+      <h2 class="text-3xl font-bold mb-4">{{ machine.name }}</h2>
       
       <div class="grid grid-cols-2 gap-4 mb-6">
         <div>
