@@ -170,6 +170,12 @@ const formatEventType = (type) => {
   return types[type] || type;
 };
 
+const formatMachineStatus = (status) => {
+  if (status === 'Producing') return 'Toodab';
+  if (status === 'Waiting') return 'Ootel';
+  return 'Väljas';
+};
+
 const formatEventDescription = (event) => {
   switch (event.type) {
     case 'order_created':
@@ -180,7 +186,7 @@ const formatEventDescription = (event) => {
     case 'production_completed':
       return `Tootmine #${event.data.production_id}`;
     case 'machine_status_changed':
-      return `Masin #${event.data.machine_id}: ${event.data.new_status}`;
+      return `Masin ${event.data.machine_id}: ${formatMachineStatus(event.data.new_status)}`;
     case 'worker_logged_in':
     case 'worker_logged_out':
       return `Töötaja: ${event.data.worker_name}`;

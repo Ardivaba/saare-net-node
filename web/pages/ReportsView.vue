@@ -110,7 +110,7 @@ const totalProductionChartData = computed(() => ({
 const productionByCodeChartData = computed(() => ({
   labels: reportsStore.productionByCode.map(item => item.code),
   datasets: [{
-    label: 'Production by Code',
+    label: 'Tootmine Joosepi Koodi Järgi',
     data: reportsStore.productionByCode.map(item => item.total),
     backgroundColor: [
       'rgba(255, 99, 132, 0.2)',
