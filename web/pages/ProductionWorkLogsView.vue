@@ -82,14 +82,7 @@
         <tr v-for="workLog in workLogs" :key="workLog.id">
           <td>{{ workLog.id }}</td>
           <td>{{ workLog.production_id }}</td>
-          <td>
-            <router-link 
-              :to="{ name: 'productions', query: { recipeCode: workLog.production?.recipe_code } }" 
-              class="text-blue-500 hover:underline"
-            >
-              {{ workLog.production ? workLog.production.recipe_code : 'M/S' }}
-            </router-link>
-          </td>
+          <td>{{ workLog.production ? workLog.production.recipe_code : 'M/S' }}</td>
           <td>{{ workLog.worker ? workLog.worker.name : 'M/S' }}</td>
           <td>{{ formatDuration(workLog.duration_seconds) }}</td>
           <td>{{ workLog.produced_quantity.toFixed(2) }}</td>
