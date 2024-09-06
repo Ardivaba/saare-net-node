@@ -70,9 +70,9 @@
         <tr>
           <th @click="sort('id')">ID {{ sortIcon('id') }}</th>
           <th @click="sort('production.id')">Tootmise ID {{ sortIcon('production.id') }}</th>
-          <th @click="sort('production.recipe_code')">Retsepti kood {{ sortIcon('production.recipe_code') }}</th>
+          <th @click="sort('production.recipe_code')">Joosepi kood {{ sortIcon('production.recipe_code') }}</th>
           <th @click="sort('worker.name')">Töötaja nimi {{ sortIcon('worker.name') }}</th>
-          <th @click="sort('duration_seconds')">Kestus (s) {{ sortIcon('duration_seconds') }}</th>
+          <th @click="sort('duration_seconds')">Kestus {{ sortIcon('duration_seconds') }}</th>
           <th @click="sort('produced_quantity')">Toodetud kogus {{ sortIcon('produced_quantity') }}</th>
           <th @click="sort('created_at')">Loodud {{ sortIcon('created_at') }}</th>
           <th @click="sort('updated_at')">Uuendatud {{ sortIcon('updated_at') }}</th>
