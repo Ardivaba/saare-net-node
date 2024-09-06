@@ -50,7 +50,8 @@
           <td>{{ machine.name }}</td>
           <td>
             <span :class="getStateClass(machine.state)">
-              {{ formatState(machine.state) }} ({{ formatTime(machine) }})
+              <!--{{ formatState(machine.state) }} ({{ formatTime(machine) }})-->
+              {{ formatState(machine.state) }}
             </span>
           </td>
           <td>{{ machine.code || 'Puudub' }}</td>
@@ -157,6 +158,7 @@ const getStateClass = (state) => {
   return classes[state] || 'badge';
 };
 
+/*
 const formatTime = (machine) => {
   let time;
   switch (machine.state) {
@@ -174,13 +176,16 @@ const formatTime = (machine) => {
   }
   return formatDuration(time);
 };
+*/
 
+/*
 const formatDuration = (durationInNanoseconds) => {
   const seconds = durationInNanoseconds / 1e9;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours}h ${minutes}m`;
 };
+*/
 
 const deleteMachine = async (id) => {
   if (confirm("Kas olete kindel, et soovite selle masina kustutada?")) {

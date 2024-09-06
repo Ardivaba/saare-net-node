@@ -47,12 +47,14 @@
         <p><strong>Töötaja nimi:</strong> {{ machine.worker?.name || 'M/S' }}</p>
       </div>
 
+      <!----
       <div class="mt-6">
         <h3 class="text-lg font-medium mb-2">Ajad</h3>
         <p><strong>Tootmise aeg:</strong> {{ formatDuration(machine.producing_time) }}</p>
         <p><strong>Ooteaeg:</strong> {{ formatDuration(machine.idle_time) }}</p>
         <p><strong>Väljalülitatud aeg:</strong> {{ formatDuration(machine.off_time) }}</p>
       </div>
+      -->
 
       <div class="mt-6 flex space-x-2">
         <RouterLink :to="`/machines/edit/${machine.id}`" class="btn btn-warning">Muuda</RouterLink>
@@ -125,12 +127,14 @@ const getStateClass = (state) => {
   return classes[state] || 'badge';
 };
 
+/*
 const formatDuration = (durationInNanoseconds) => {
   const seconds = durationInNanoseconds / 1e9;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours}h ${minutes}m`;
 };
+*/
 
 const deleteMachine = async () => {
   if (confirm('Kas olete kindel, et soovite selle masina kustutada?')) {

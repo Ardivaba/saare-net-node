@@ -42,7 +42,7 @@ function createChart() {
         },
         title: {
           display: true,
-          text: 'Toodang Retsepti Koodi Järgi'
+          text: 'Toodang Joosepi Koodi Järgi'
         }
       }
     }

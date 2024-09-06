@@ -109,9 +109,11 @@
                 <p class="text-sm font-bold">
                   {{ formatMachineState(machine.state) }}
                 </p>
+                <!--
                 <p class="text-sm">
                   {{ formatMachineStateTime(machine) }}
                 </p>
+                -->
               </div>
               <p class="text-sm">
                 Toodetud: {{ machine.produced_rope_length.toFixed(2) }} m
@@ -323,6 +325,7 @@ function navigateToMachine(machineId) {
   router.push(`/machines/${machineId}`);
 }
 
+/*
 function formatMachineStateTime(machine) {
   let time;
   switch (machine.state) {
@@ -340,13 +343,16 @@ function formatMachineStateTime(machine) {
   }
   return formatDuration(time);
 }
+*/
 
+/*
 function formatDuration(durationInNanoseconds) {
   const seconds = durationInNanoseconds / 1e9;
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours}h ${minutes}m`;
 }
+*/
 </script>
 
 <style scoped>
