@@ -28,6 +28,7 @@ async function seedProductionWorkLogs() {
             const numWorkers = (production.produced_quantity < 100 || Math.random() < 0.9) ? 1 : 2;
             const selectedWorkers = workers
                 .sort(() => 0.5 - Math.random())
+                .filter(x => x.name != 'Priit')
                 .slice(0, numWorkers);
 
             // Determine the created_at date
