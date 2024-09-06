@@ -104,7 +104,7 @@
             @click="navigateToMachine(machine.id)"
           >
             <div class="card-body p-4">
-              <h3 class="card-title text-lg mb-1">{{ machine.code || `Masin #${machine.id}` }}</h3>
+              <h3 class="card-title text-lg mb-1">{{ machine.code || `${machine.name}` }}</h3>
               <div class="mb-2">
                 <p class="text-sm font-bold">
                   {{ formatMachineState(machine.state) }}
