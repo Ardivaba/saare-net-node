@@ -84,7 +84,7 @@
           <td>{{ workLog.production_id }}</td>
           <td>{{ workLog.production ? workLog.production.recipe_code : 'M/S' }}</td>
           <td>{{ workLog.worker ? workLog.worker.name : 'M/S' }}</td>
-          <td>{{ formatDuration(workLog.duration_seconds) }}</td>
+          <td>{{ workLog.duration_seconds > 0 ? formatDuration(workLog.duration_seconds) : 'Tootmisel' }}</td>
           <td>{{ workLog.produced_quantity.toFixed(2) }}</td>
           <td>{{ formatDate(workLog.created_at) }}</td>
           <td>{{ formatDate(workLog.updated_at) }}</td>
